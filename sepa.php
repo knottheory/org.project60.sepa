@@ -599,3 +599,10 @@ function sepa_civicrm_xmlMenu(array &$files): void {
     $files[] = $file;
   }
 }
+
+function sepa_civicrm_coreResourceList(&$list, $region) {
+  if ($region === 'html-header') {
+    Civi::resources()->addStyleFile('org.project60.sepa', 'css/sepa.css');
+  }
+}
+
