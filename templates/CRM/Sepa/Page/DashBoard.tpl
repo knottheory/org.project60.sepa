@@ -135,7 +135,7 @@
 
 {* legend by @scardinius *}
 <br/>
-<table>
+<table class="sepa_dashboard">
   <caption>{ts domain="org.project60.sepa"}Legend{/ts}</caption>
   <tr>
     <th>{ts domain="org.project60.sepa"}Status{/ts}</th>
