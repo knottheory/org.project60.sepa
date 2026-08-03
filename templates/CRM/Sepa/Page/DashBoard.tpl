@@ -70,17 +70,19 @@
   </div>
 {/if}
 
-<table>
-  <tr>
-    <th>{ts domain="org.project60.sepa"}Group Name{/ts}</th>
-    <th>{ts domain="org.project60.sepa"}Status{/ts}</th>
-    <th>{ts domain="org.project60.sepa"}Type{/ts}</th>
-    <th>{ts domain="org.project60.sepa"}Submission{/ts}</th>
-    <th>{ts domain="org.project60.sepa"}Collection{/ts}</th>
-    <th>{ts domain="org.project60.sepa"}Transactions{/ts}</th>
-    <th>{ts domain="org.project60.sepa"}Total{/ts}</th>
-    <th></th>
-  </tr>
+<table class="sepa_dashboard" id="options">
+  <thead>
+    <tr role="row">
+      <th class="sorting" aria-controls="sepa-option">{ts domain="org.project60.sepa"}Group Name{/ts}</th>
+      <th class="sorting" aria-controls="sepa-option">{ts domain="org.project60.sepa"}Status{/ts}</th>
+      <th class="sorting" aria-controls="sepa-option">{ts domain="org.project60.sepa"}Type{/ts}</th>
+      <th class="sorting" aria-controls="sepa-option">{ts domain="org.project60.sepa"}Submission{/ts}</th>
+      <th class="sorting" aria-controls="sepa-option">{ts domain="org.project60.sepa"}Collection{/ts}</th>
+      <th class="sorting" aria-controls="sepa-option">{ts domain="org.project60.sepa"}Transactions{/ts}</th>
+      <th class="sorting" aria-controls="sepa-option">{ts domain="org.project60.sepa"}Total{/ts}</th>
+      <th></th>
+    </tr>
+  </thead>
   {foreach from=$groups item=group}
   {assign var='file_id' value=$group.file_id}
   {assign var='group_id' value=$group.id}
@@ -105,27 +107,26 @@
       {$group.nb_contrib}
     </td>
     <td style="white-space:nowrap;">{$group.total|crmMoney:$group.currency}</td>
-    <td>
-      <a href="{crmURL p="civicrm/sepa/listgroup" q="group_id=$group_id"}" class="button button_view">{ts domain="org.project60.sepa"}Contributions{/ts}</a>
+    <td class="sepa_actions">
+      {crmButton href="{crmURL p="civicrm/sepa/listgroup" q="group_id=$group_id"}" class="button_view" title="test" icon="fa-info"}{ts domain="org.project60.sepa"}Contributions{/ts}{/crmButton}
       {if $group.status == 'open'}
         {if $can_batch}
           {if $group.submit == 'missed'}
-            <a href="{crmURL p="civicrm/sepa/closegroup" q="group_id=$group_id&status=missed"}" class="button button_close">
+            {crmButton href="{crmURL p="civicrm/sepa/closegroup" q="group_id=$group_id&status=missed"}" class="button_close" title="{ts domain="org.project60.sepa"}Close and Submit{/ts}" icon="fa-paper-plane"}{ts domain="org.project60.sepa"}Close and Submit{/ts}{/crmButton}
           {else}
-            <a href="{crmURL p="civicrm/sepa/closegroup" q="group_id=$group_id"}" class="button button_close">
+            {crmButton href="{crmURL p="civicrm/sepa/closegroup" q="group_id=$group_id"}" class="button_close" title="{ts domain="org.project60.sepa"}Close and Submit{/ts}" icon="fa-paper-plane"}{ts domain="org.project60.sepa"}Close and Submit{/ts}{/crmButton}
           {/if}
-          {ts domain="org.project60.sepa"}Close and Submit{/ts}</a>
         {/if}
       {else}
-        <a href="{crmURL p="civicrm/sepa/xml" q="id=$file_id"}" download="{$group.file}" class="button button_export">{ts domain="org.project60.sepa"}Download Again{/ts}</a>
+        {crmButton href="{crmURL p="civicrm/sepa/xml" q="id=$file_id"}" class="button_export" title="{ts domain="org.project60.sepa"}Download Again{/ts}" icon=""}{ts domain="org.project60.sepa"}Download Again{/ts}{/crmButton}
         {if $closed_status_id eq $group.status_id}
           {if not $group.collection_date_in_future}
-            <a href="{crmURL p="civicrm/sepa/mark_received" q="group_id=$group_id"}" class="button button_received">{ts domain="org.project60.sepa"}Mark Received{/ts}</a>
+            {crmButton href="{crmURL p="civicrm/sepa/mark_received" q="group_id=$group_id"}" class="button_received" title="{ts domain="org.project60.sepa"}Mark Received{/ts}" icon=""}{ts domain="org.project60.sepa"}Mark Received{/ts}{/crmButton}
           {/if}
         {/if}
       {/if}
       {if $can_delete}
-      <a href="{crmURL p="civicrm/sepa/deletegroup" q="group_id=$group_id"}" class="button button_view">{ts domain="org.project60.sepa"}Delete{/ts}</a>
+        {crmButton href="{crmURL p="civicrm/sepa/deletegroup" q="group_id=$group_id"}" class="button_view" title="{ts domain="org.project60.sepa"}Delete{/ts}" icon="fa-trash-can"}{ts domain="org.project60.sepa"}Delete{/ts}{/crmButton}
       {/if}
     </td>
   </tr>
@@ -161,16 +162,6 @@
     <td>{ts domain="org.project60.sepa"}The group is closed and uploaded to creditor, submission date is in the past.{/ts}</td>
   </tr>
 </table>
-
-{literal}
-<style>
-  tr.submit_missed {background-color: #EE0000AA;}
-  tr.submit_urgently {background-color: #AC6700AA;}
-  tr.submit_soon {background-color: #0165FFAA;}
-  tr.submit_later {background-color: #008300AA;}
-  tr.submit_closed {background-color: #00830033;}
-</style>
-{/literal}
 
 <script type="text/javascript">
 let received_confirmation_message = `{ts domain="org.project60.sepa"}Do you really want to mark this groups as 'payment received'?{/ts}`;
